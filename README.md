@@ -1,6 +1,7 @@
 # Project-Dashcam
 Stacks Used  - Django rest framework, Django, Python, HTML
 imei is primary key for login and foreign key for rest functions.
+for code files move url to https://github.com/guptagaurish/Project-Dashcam/tree/master
 
 Assumption - 
 command response will be send by Dashcam to Backend.
