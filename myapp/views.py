@@ -18,6 +18,15 @@ def Login_get(request):
         serializer = LoginSerializer(Logindata, many=True)
         return Response(serializer.data)
 
+    if request.method == 'POST': 
+
+        serializer = LoginSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET', 'POST'])
 def Alarmdata_get(request,imei):
    
         try:
@@ -29,6 +38,15 @@ def Alarmdata_get(request,imei):
            serializer = AlarmmsgSerializer(Alarmmsgdata, many=True)
            return Response(serializer.data)
 
+        if request.method == 'POST': 
+
+            serializer = AlarmmsgSerializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET', 'POST'])
 def Locdata_get(request,imei):
    
         try:
@@ -40,7 +58,17 @@ def Locdata_get(request,imei):
            serializer = LocationmsgSerializer(Locmsgdata, many=True)
            return Response(serializer.data)
 
-   
+        if request.method == 'POST': 
+
+            serializer = LocationmsgSerializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+
+
+@api_view(['POST'])
 def upload_video(request):
      
     if request.method == 'POST': 
@@ -65,13 +93,10 @@ def upload_video(request):
 class Command_get(APIView):
    
 
-    def post(self, request, format=None):
-        serializer = CommandmsgSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        else:
-            return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
+    def get(self, request, format=None):
+        Commandmsgdata = Command_msg.objects.filter('imei')
+        serializer = AlarmmsgSerializer(Commandmsgdata, many=True)
+        return Response(serializer.data)
 
 class Commandresponse_get(APIView):
    
@@ -86,12 +111,23 @@ class Commandresponse_get(APIView):
 
 
 def display(request):
+    if request.method == "GET":
+        videos = Videos.objects.all()
+        context ={
+            'videos':videos,
+        }
      
-    videos = Videos.objects.all()
-    context ={
-        'videos':videos,
-    }
-     
-    return render(request,'videos.html',context)
+        return render(request,'videos.html',context)
+
+def fetch_alarmby_type(request):
+    if request.method == "GET":
+        queryset = Alarm_messege.objects.filter(
+         alarm_type = input()
+        ).values('imei','type','alarm_type','alarm_time','longitude','latitude')
+        return Response(queryset.data)
+
+
+
+
 
 # Create your views here.
