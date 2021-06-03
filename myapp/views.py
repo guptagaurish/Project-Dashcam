@@ -94,7 +94,7 @@ class Command_get(APIView):
    
 
     def get(self, request, format=None):
-        Commandmsgdata = Command_msg.objects.filter('imei')
+        Commandmsgdata = Command_msg.objects.all()
         serializer = AlarmmsgSerializer(Commandmsgdata, many=True)
         return Response(serializer.data)
 
